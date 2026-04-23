@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Document</title>
     <style>
         :root {
@@ -24,6 +24,7 @@
             font-family: 'Georgia', 'Times New Roman', serif;
             cursor: default;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .stars-container {
@@ -64,17 +65,17 @@
 
         .overlay-text {
             position: fixed;
-            bottom: 35px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
             color: #ffb3d0;
-            font-size: 1rem;
-            letter-spacing: 0.4em;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
             text-align: center;
             opacity: 0.7;
             animation: fadePulse 4s ease-in-out infinite;
-            text-shadow: 0 0 15px #ff6b9d, 0 0 35px #c44dff;
+            text-shadow: 0 0 12px #ff6b9d, 0 0 30px #c44dff;
             pointer-events: none;
         }
 
@@ -89,43 +90,48 @@
         }
 
         .small-note {
-            font-size: 0.7rem;
-            letter-spacing: 0.25em;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
             opacity: 0.55;
             margin-top: 4px;
         }
 
-        /* Кнопка зміни мови */
+        /* Кнопка зміни мови – менша й зручніша для пальців */
         .lang-btn {
             position: fixed;
-            top: 25px;
-            right: 25px;
+            top: 20px;
+            right: 20px;
             z-index: 10;
             background: rgba(255, 107, 157, 0.15);
             border: 1px solid #ff6b9d;
             color: #ffb3d0;
             font-family: 'Georgia', serif;
-            font-size: 0.9rem;
-            padding: 8px 16px;
-            border-radius: 30px;
+            font-size: 0.75rem;
+            padding: 8px 14px;
+            border-radius: 25px;
             cursor: pointer;
             backdrop-filter: blur(8px);
             transition: all 0.3s;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
             text-shadow: 0 0 8px #ff6b9d;
-            box-shadow: 0 0 15px rgba(255, 107, 157, 0.25);
+            box-shadow: 0 0 12px rgba(255, 107, 157, 0.2);
+            min-height: 36px;
+            min-width: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .lang-btn:hover {
             background: rgba(255, 107, 157, 0.3);
             border-color: #ff9ec5;
             color: #fff;
-            box-shadow: 0 0 25px rgba(255, 107, 157, 0.5);
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
             transform: scale(1.05);
         }
 
         .lang-btn:active {
-            transform: scale(0.97);
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -133,7 +139,6 @@
     <canvas id="loveCanvas"></canvas>
     <div class="stars-container" id="starsContainer"></div>
 
-    <!-- Кнопка перемикання мов -->
     <button class="lang-btn" id="langButton">🌐 Змінити мову</button>
 
     <div class="overlay-text">
@@ -157,7 +162,7 @@
                 return 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
             }
 
-            // Великий масив мов та фраз (понад 30)
+            // Мови
             const languagePhrases = [
                 { lang: "🇺🇦 Українська", phrase: "Я тебе люблю 💕" },
                 { lang: "🇬🇧 English", phrase: "I love you 💕" },
@@ -201,8 +206,10 @@
             let currentLangIndex = 0;
             let phrases = [languagePhrases[currentLangIndex].phrase];
 
-            const TOTAL_ITEMS = 60;
-            const HEART_SCALE = 16;
+            // Кількість написів трохи зменшена для телефону
+            const TOTAL_ITEMS = 42;
+            // Масштаб серця буде вираховуватись динамічно
+            let HEART_SCALE = 12;
             const SPEED = 0.04;
             let globalOffset = 0;
 
@@ -212,21 +219,32 @@
                 return { x, y };
             }
 
+            // Обчислюємо оптимальний масштаб серця, щоб вписувалося в екран
+            function updateHeartScale() {
+                // Ширина серця: 32 * scale, висота: ~30 * scale
+                // Хочемо, щоб серце займало ~85% ширини або ~70% висоти (менше з того)
+                const maxWidth = width * 0.9;
+                const maxHeight = height * 0.7;
+                const scaleByWidth = maxWidth / 32;
+                const scaleByHeight = maxHeight / 30;
+                HEART_SCALE = Math.min(scaleByWidth, scaleByHeight, 16); // обмеження, щоб не надто велике
+            }
+
             function draw() {
                 ctx.clearRect(0, 0, width, height);
 
                 const cx = width / 2;
-                const cy = height / 2 - 20;
+                const cy = height / 2 - height * 0.05; // трохи вище центру
 
                 // Ледь помітний силует серця
                 ctx.save();
                 ctx.globalAlpha = 0.07;
                 ctx.strokeStyle = '#ff6b9d';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 1.5;
                 ctx.shadowColor = '#ff3b6f';
-                ctx.shadowBlur = 25;
+                ctx.shadowBlur = 20;
                 ctx.beginPath();
-                for (let t = 0; t < Math.PI * 2; t += 0.01) {
+                for (let t = 0; t < Math.PI * 2; t += 0.02) {
                     const pos = getHeartPosition(t);
                     const px = cx + pos.x;
                     const py = cy - pos.y;
@@ -238,6 +256,8 @@
                 ctx.restore();
 
                 // Малюємо фрази горизонтально
+                const fontSizeBase = Math.max(12, HEART_SCALE * 1.1); // шрифт залежить від розміру серця
+
                 for (let i = 0; i < TOTAL_ITEMS; i++) {
                     const tNorm = (i / TOTAL_ITEMS + globalOffset) % 1.0;
                     const tAngle = tNorm * Math.PI * 2;
@@ -248,21 +268,21 @@
 
                     const phrase = phrases[i % phrases.length];
 
-                    const pulse = 1 + Math.sin(time * 3 + i * 0.5) * 0.15;
-                    const alpha = 0.7 + Math.sin(time * 2.5 + i) * 0.25;
+                    const pulse = 1 + Math.sin(time * 3 + i * 0.5) * 0.12;
+                    const alpha = 0.7 + Math.sin(time * 2.5 + i) * 0.3;
 
                     ctx.save();
                     ctx.shadowColor = '#ff3b6f';
-                    ctx.shadowBlur = 8 + Math.sin(time * 4 + i) * 3;
+                    ctx.shadowBlur = 6 + Math.sin(time * 4 + i) * 2;
                     ctx.globalAlpha = alpha;
 
-                    const gradient = ctx.createLinearGradient(x, y - 8, x, y + 8);
+                    const gradient = ctx.createLinearGradient(x, y - 6, x, y + 6);
                     gradient.addColorStop(0, '#ffffff');
                     gradient.addColorStop(0.5, '#ffb3d0');
                     gradient.addColorStop(1, '#ff6b9d');
                     ctx.fillStyle = gradient;
 
-                    ctx.font = `${14 + pulse * 1.5}px "Georgia", "Times New Roman", serif`;
+                    ctx.font = `${fontSizeBase * pulse}px "Georgia", "Times New Roman", serif`;
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
 
@@ -280,16 +300,16 @@
             function createStars() {
                 const container = document.getElementById('starsContainer');
                 container.innerHTML = '';
-                const count = 90;
+                const count = 60; // трохи менше зірок
                 for (let i = 0; i < count; i++) {
                     const star = document.createElement('div');
                     star.className = 'star';
-                    const size = 1 + Math.random() * 2.5;
+                    const size = 1 + Math.random() * 2;
                     star.style.width = size + 'px';
                     star.style.height = size + 'px';
                     star.style.left = Math.random() * 100 + '%';
                     star.style.top = Math.random() * 100 + '%';
-                    star.style.setProperty('--dur', (1.5 + Math.random() * 3) + 's');
+                    star.style.setProperty('--dur', (1.5 + Math.random() * 2.5) + 's');
                     star.style.animationDelay = Math.random() * 3 + 's';
                     container.appendChild(star);
                 }
@@ -298,18 +318,19 @@
             function resize() {
                 width = canvas.width = window.innerWidth;
                 height = canvas.height = window.innerHeight;
+                updateHeartScale();
+                createStars(); // перегенерувати зірки під новий розмір
             }
 
             function animate(timestamp) {
                 time = timestamp * 0.001;
-                globalOffset += SPEED * 0.01;
+                globalOffset += SPEED * 0.012;
                 if (globalOffset > 1) globalOffset -= 1;
 
                 draw();
                 requestAnimationFrame(animate);
             }
 
-            // Перемикання мови
             function switchLanguage() {
                 currentLangIndex = (currentLangIndex + 1) % languagePhrases.length;
                 const selected = languagePhrases[currentLangIndex];
@@ -317,16 +338,14 @@
                 document.querySelector('.lang-btn').textContent = `🌐 ${selected.lang}`;
             }
 
-            // Додаємо обробник на кнопку
+            // Ініціалізація
             document.getElementById('langButton').addEventListener('click', switchLanguage);
-
-            // Початкова назва кнопки
             document.querySelector('.lang-btn').textContent = `🌐 ${languagePhrases[0].lang}`;
 
-            window.addEventListener('resize', () => {
-                resize();
-                createStars();
-            });
+            window.addEventListener('resize', resize);
+            window.addEventListener('orientationchange', resize);
+            // Плавна робота на iOS
+            window.addEventListener('touchstart', () => {}, { passive: true });
 
             resize();
             createStars();

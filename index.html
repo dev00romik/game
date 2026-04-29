@@ -2,376 +2,195 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Вікторія 💕</title>
-    <style>
-        :root {
-            --bg1: #1a0a14;
-            --bg2: #0d0007;
-            --safe-top: env(safe-area-inset-top, 20px);
-            --safe-bottom: env(safe-area-inset-bottom, 20px);
-            --safe-left: env(safe-area-inset-left, 10px);
-            --safe-right: env(safe-area-inset-right, 10px);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: radial-gradient(ellipse at center, var(--bg1) 0%, var(--bg2) 80%, #050002 100%);
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            font-family: 'Georgia', 'Times New Roman', serif;
-            cursor: default;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .stars-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: twinkle var(--dur) ease-in-out infinite;
-        }
-
-        @keyframes twinkle {
-            0%,
-            100% {
-                opacity: 0.3;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.7);
-            }
-        }
-
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            display: block;
-        }
-
-        .overlay-text {
-            position: fixed;
-            bottom: calc(var(--safe-bottom) + 10px);
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            color: #ffb3d0;
-            font-size: 0.85rem;
-            letter-spacing: 0.3em;
-            text-align: center;
-            opacity: 0.75;
-            animation: fadePulse 4s ease-in-out infinite;
-            text-shadow: 0 0 12px #ff6b9d, 0 0 30px #c44dff;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-
-        @keyframes fadePulse {
-            0%,
-            100% {
-                opacity: 0.5;
-            }
-            50% {
-                opacity: 0.9;
-            }
-        }
-
-        .small-note {
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            opacity: 0.6;
-            margin-top: 2px;
-        }
-
-        /* Кнопка зміни мови */
-        .lang-btn {
-            position: fixed;
-            top: calc(var(--safe-top) + 8px);
-            right: calc(var(--safe-right) + 8px);
-            z-index: 10;
-            background: rgba(255, 107, 157, 0.18);
-            border: 1px solid #ff6b9d;
-            color: #ffb3d0;
-            font-family: 'Georgia', serif;
-            font-size: 0.75rem;
-            padding: 8px 14px;
-            border-radius: 25px;
-            cursor: pointer;
-            backdrop-filter: blur(8px);
-            transition: all 0.3s;
-            letter-spacing: 0.04em;
-            text-shadow: 0 0 8px #ff6b9d;
-            box-shadow: 0 0 12px rgba(255, 107, 157, 0.15);
-            min-height: 36px;
-            min-width: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            white-space: nowrap;
-        }
-
-        .lang-btn:active {
-            background: rgba(255, 107, 157, 0.35);
-            transform: scale(0.96);
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💖</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Caveat:wght@400;700&family=Comfortaa:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <canvas id="loveCanvas"></canvas>
-    <div class="stars-container" id="starsContainer"></div>
 
-    <button class="lang-btn" id="langButton">🌐 Змінити мову</button>
+    <!-- Легкі сердечка на фоні -->
+    <div class="hearts-container" id="heartsContainer"></div>
 
-    <div class="overlay-text">
-        Вікторія
-        <div class="small-note">Я тебе люблю💕</div>
-    </div>
+    <!-- Навігація -->
+    <nav class="navbar glass">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">💝</a>
+            <ul class="nav-menu">
+                <li><a href="#home">Головна</a></li>
+                <li><a href="#our-story">Наша історія</a></li>
+                <li><a href="#game">Гра</a></li>
+                <li><a href="#reasons">Про тебе</a></li>
+                <li><a href="#message">Лист</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-    <script>
-        (function() {
-            const canvas = document.getElementById('loveCanvas');
-            const ctx = canvas.getContext('2d');
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div class="hero-content glass-card">
+            <p class="hero-greeting">Моя улюблена</p>
+            <h1 class="hero-title">
+                <span class="typewriter" id="typewriter"></span>
+                <span class="cursor">|</span>
+            </h1>
+            <p class="hero-subtitle">Люблю дуже сильно💖💋</p>
+            <div class="hero-buttons">
+                <a href="#our-story" class="btn btn-primary">Наша історія</a>
+                <a href="#message" class="btn btn-secondary">Лист</a>
+            </div>
+            <div class="scroll-indicator">
+                <span>Гортай вниз</span>
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            let width, height;
-            let time = 0;
+    <!-- Наша історія -->
+    <section id="our-story" class="section story-section">
+        <div class="section-container">
+            <h2 class="section-title">Як почалось спілкування</h2>
+            <p class="section-subtitle">Моменти, які я пам'ятаю(ну не всі)</p>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content glass">
+                        <div class="timeline-icon">🕵️</div>
+                        <h3>Ти дізналась</h3>
+                        <p>7 липня 2025, приблизно 22:00. Ти написала: «А то ти типу серйозно», і запитала «А як це так вийшло?», ну бачиш якось так вийшло)</p>
+                        <span class="timeline-date">7 липня 2025, 22:00</span>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content glass">
+                        <div class="timeline-icon">💬</div>
+                        <h3>Нічні переписки</h3>
+                        <p>Ми почали спілкуватися до самої ночі. Я спеціально старався не заснути , але засинав і пропускав твої повідомлення(</p>
+                        <span class="timeline-date">Липень 2025</span>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content glass">
+                        <div class="timeline-icon">🎢</div>
+                        <h3>Перша прогулянка в двох</h3>
+                        <p>Я думав буде з нами Анжеліка. Але її не було і я не знав як поводитись ну було трошки напружно.</p>
+                        <span class="timeline-date">Не пам'ятаю дату(</span>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content glass">
+                        <div class="timeline-icon">💘</div>
+                        <h3>Перший раз тебе обійняв</h3>
+                        <p>Ми вже розходились прийшли під під'їзд і я тебе обійняв, ти б бачила свій вираз лиця, я це запам'ятаю на довго 😲</p>
+                        <span class="timeline-date">Не пам'ятаю дату</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            // Серце параметричне
-            function heartX(t) {
-                return 16 * Math.pow(Math.sin(t), 3);
-            }
-            function heartY(t) {
-                return 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-            }
+    <!-- Гра "Злови сердечко" -->
+    <section id="game" class="section game-section">
+        <div class="section-container">
+            <h2 class="section-title">Гра для тебе</h2>
+            <p class="section-subtitle">Лови сердечко і розслабся трошки (Клікай на нього)</p>
+            <div class="game-wrapper glass">
+                <div class="game-area" id="gameArea">
+                    <div class="game-heart" id="gameHeart">❤️</div>
+                </div>
+                <div class="game-info">
+                    <p>Спіймано: <span id="score">0</span></p>
+                    <p class="game-hint">Сердечко тікає, встигни клікнути!</p>
+                </div>
+                <div id="gameMessage" class="game-message"></div>
+            </div>
+        </div>
+    </section>
 
-            // Мови
-            const languagePhrases = [
-                { lang: "🇺🇦 Українська", phrase: "Я тебе люблю 💕" },
-                { lang: "🇬🇧 English", phrase: "I love you 💕" },
-                { lang: "🇪🇸 Español", phrase: "Te quiero 💕" },
-                { lang: "🇫🇷 Français", phrase: "Je t'aime 💕" },
-                { lang: "🇩🇪 Deutsch", phrase: "Ich liebe dich 💕" },
-                { lang: "🇮🇹 Italiano", phrase: "Ti amo 💕" },
-                { lang: "🇵🇱 Polski", phrase: "Kocham cię 💕" },
-                { lang: "🇯🇵 日本語", phrase: "愛してる 💕" },
-                { lang: "🇰🇷 한국어", phrase: "사랑해 💕" },
-                { lang: "🇨🇳 中文", phrase: "我爱你 💕" },
-                { lang: "🇹🇷 Türkçe", phrase: "Seni seviyorum 💕" },
-                { lang: "🇵🇹 Português", phrase: "Eu te amo 💕" },
-                { lang: "🇳🇱 Nederlands", phrase: "Ik hou van je 💕" },
-                { lang: "🇸🇪 Svenska", phrase: "Jag älskar dig 💕" },
-                { lang: "🇳🇴 Norsk", phrase: "Jeg elsker deg 💕" },
-                { lang: "🇩🇰 Dansk", phrase: "Jeg elsker dig 💕" },
-                { lang: "🇫🇮 Suomi", phrase: "Rakastan sinua 💕" },
-                { lang: "🇭🇺 Magyar", phrase: "Szeretlek 💕" },
-                { lang: "🇷🇴 Română", phrase: "Te iubesc 💕" },
-                { lang: "🇨🇿 Čeština", phrase: "Miluji tě 💕" },
-                { lang: "🇸🇰 Slovenčina", phrase: "Ľúbim ťa 💕" },
-                { lang: "🇧🇬 Български", phrase: "Обичам те 💕" },
-                { lang: "🇷🇸 Srpski", phrase: "Volim te 💕" },
-                { lang: "🇭🇷 Hrvatski", phrase: "Volim te 💕" },
-                { lang: "🇬🇷 Ελληνικά", phrase: "Σ' αγαπώ 💕" },
-                { lang: "🇮🇱 עברית", phrase: "אני אוהב אותך 💕" },
-                { lang: "🇸🇦 العربية", phrase: "أحبك 💕" },
-                { lang: "🇮🇳 हिन्दी", phrase: "मैं तुमसे प्यार करता हूँ 💕" },
-                { lang: "🇹🇭 ไทย", phrase: "ฉันรักคุณ 💕" },
-                { lang: "🇻🇳 Tiếng Việt", phrase: "Anh yêu em 💕" },
-                { lang: "🇮🇩 Indonesia", phrase: "Aku cinta kamu 💕" },
-                { lang: "🇵🇭 Filipino", phrase: "Mahal kita 💕" },
-                { lang: "🇲🇾 Melayu", phrase: "Saya cinta padamu 💕" },
-                { lang: "🇪🇪 Eesti", phrase: "Ma armastan sind 💕" },
-                { lang: "🇱🇻 Latviešu", phrase: "Es tevi mīlu 💕" },
-                { lang: "🇱🇹 Lietuvių", phrase: "Aš tave myliu 💕" },
-                { lang: "🇮🇸 Íslenska", phrase: "Ég elska þig 💕" }
-            ];
+    <!-- Чому ти найкраща -->
+    <section id="reasons" class="section reasons-section">
+        <div class="section-container">
+            <h2 class="section-title">Про тебе</h2>
+            <p class="section-subtitle">(Список можна продовжувати)</p>
+            <div class="reasons-grid" id="reasonsGrid">
+                <!-- JS заповнить -->
+            </div>
+        </div>
+    </section>
 
-            let currentLangIndex = 0;
-            let phrases = [languagePhrases[currentLangIndex].phrase];
+    <!-- Лічильник -->
+    <section class="section counter-section">
+        <div class="section-container">
+            <div class="counter-card glass">
+                <h2>Наше спілкування вже тягнеться</h2>
+                <div class="counter-display">
+                    <div class="counter-unit">
+                        <span class="counter-number" id="daysCount">0</span>
+                        <span class="counter-label">днів</span>
+                    </div>
+                    <div class="counter-separator">:</div>
+                    <div class="counter-unit">
+                        <span class="counter-number" id="hoursCount">0</span>
+                        <span class="counter-label">годин</span>
+                    </div>
+                    <div class="counter-separator">:</div>
+                    <div class="counter-unit">
+                        <span class="counter-number" id="minutesCount">0</span>
+                        <span class="counter-label">хвилин</span>
+                    </div>
+                    <div class="counter-separator">:</div>
+                    <div class="counter-unit">
+                        <span class="counter-number" id="secondsCount">0</span>
+                        <span class="counter-label">секунд</span>
+                    </div>
+                </div>
+                <p class="counter-message">І це тільки початок ;)</p>
+            </div>
+        </div>
+    </section>
 
-            // Динамічне обчислення кількості написів і масштабу
-            let TOTAL_ITEMS = 47;
-            let HEART_SCALE = 8;
-            const SPEED = 0.10;
-            let globalOffset = 0;
+    <!-- Лист -->
+    <section id="message" class="section message-section">
+        <div class="section-container">
+            <h2 class="section-title">Лист</h2>
+            <div class="letter-container">
+                <div class="letter-envelope glass" id="envelope">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-body">
+                        <span class="envelope-heart">💌</span>
+                        <p class="envelope-text">Натисни, щоб відкрити</p>
+                    </div>
+                    <div class="envelope-paper" id="paper">
+                        <div class="paper-content">
+                            <p class="paper-dear">Моя любима,</p>
+                            <p>Той вечір 7 липня, я не міг подумати, що з того моменту почнемо спілкуватись. З тобою я можу бути дурним, нормальним, несерйозним, інколи ти все одно зла на мене.</p>
+                            <p>З тобою цікаво гуляти, спілкуватись ну від тебе вайбік якийсь йде. Я тобі дякую за все, що ти ще не розвернулась і не поставила крапку.</p>
+                            <p>Я обіцяю помінятись і ставати кращим, щоб все було добре💖</p>
+                            <p class="paper-signature">Твоя Мавпочка🙈</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            function getHeartPosition(t) {
-                const x = heartX(t) * HEART_SCALE;
-                const y = heartY(t) * HEART_SCALE;
-                return { x, y };
-            }
+    <!-- Футер -->
+    <footer class="footer glass">
+        <div class="footer-content">
+            <p>Зроблено з любов’ю для тебе</p>
+            <div class="footer-hearts">
+                <span>💖</span><span>💕</span><span>💗</span>
+            </div>
+            <p class="footer-quote">Все для тебе💖</p>
+        </div>
+    </footer>
 
-            // Розумне масштабування під будь-який екран
-            function updateHeartScale() {
-                // Беремо безпечні відступи: зверху треба залишити місце для кнопки (≈50px) та статус-бару,
-                // знизу – підпис (≈60px), з боків – невеликі відступи.
-                const topMargin = 60 + (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 20);
-                const bottomMargin = 70 + (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-bottom')) || 20);
-                const sideMargin = 20;
-
-                const availableWidth = width - sideMargin * 2;
-                const availableHeight = height - topMargin - bottomMargin;
-
-                // Ширина серця: ~32 * HEART_SCALE, висота: ~30 * HEART_SCALE
-                const scaleByWidth = availableWidth / 32;
-                const scaleByHeight = availableHeight / 30;
-
-                HEART_SCALE = Math.min(scaleByWidth, scaleByHeight, 14); // максимум 14 для гарного вигляду
-                if (HEART_SCALE < 7) HEART_SCALE = 7; // мінімальне значення
-
-                // Кількість написів пропорційна довжині контуру (приблизно 100 * HEART_SCALE) 
-                // Встановлюємо так, щоб текст не налітав один на одного.
-                const baseItems = 28;
-                const scaleFactor = HEART_SCALE / 10; // 10 - базовий масштаб
-                TOTAL_ITEMS = Math.floor(baseItems * scaleFactor);
-                if (TOTAL_ITEMS < 24) TOTAL_ITEMS = 24;
-                if (TOTAL_ITEMS > 48) TOTAL_ITEMS = 48;
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, width, height);
-
-                // Центр серця: по горизонталі центр, по вертикалі трохи вище середини вільної області
-                const topMargin = 60 + (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 20);
-                const bottomMargin = 70 + (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-bottom')) || 20);
-                const availableHeight = height - topMargin - bottomMargin;
-                const cx = width / 2;
-                const cy = topMargin + availableHeight / 2 - 10; // -10 для візуального балансу
-
-                // Легкий силует серця
-                ctx.save();
-                ctx.globalAlpha = 0.06;
-                ctx.strokeStyle = '#ff6b9d';
-                ctx.lineWidth = 1.5;
-                ctx.shadowColor = '#ff3b6f';
-                ctx.shadowBlur = 18;
-                ctx.beginPath();
-                for (let t = 0; t < Math.PI * 2; t += 0.02) {
-                    const pos = getHeartPosition(t);
-                    const px = cx + pos.x;
-                    const py = cy - pos.y;
-                    if (t === 0) ctx.moveTo(px, py);
-                    else ctx.lineTo(px, py);
-                }
-                ctx.closePath();
-                ctx.stroke();
-                ctx.restore();
-
-                // Розмір шрифту залежить від масштабу
-                const fontSizeBase = Math.max(11, HEART_SCALE * 0.95);
-
-                for (let i = 0; i < TOTAL_ITEMS; i++) {
-                    const tNorm = (i / TOTAL_ITEMS + globalOffset) % 1.0;
-                    const tAngle = tNorm * Math.PI * 2;
-
-                    const pos = getHeartPosition(tAngle);
-                    const x = cx + pos.x;
-                    const y = cy - pos.y;
-
-                    const phrase = phrases[i % phrases.length];
-
-                    const pulse = 1 + Math.sin(time * 3 + i * 0.5) * 0.12;
-                    const alpha = 0.75 + Math.sin(time * 2.5 + i) * 0.25;
-
-                    ctx.save();
-                    ctx.shadowColor = '#ff3b6f';
-                    ctx.shadowBlur = 5 + Math.sin(time * 4 + i) * 2;
-                    ctx.globalAlpha = alpha;
-
-                    const gradient = ctx.createLinearGradient(x, y - 5, x, y + 5);
-                    gradient.addColorStop(0, '#ffffff');
-                    gradient.addColorStop(0.5, '#ffb3d0');
-                    gradient.addColorStop(1, '#ff6b9d');
-                    ctx.fillStyle = gradient;
-
-                    ctx.font = `${fontSizeBase * pulse}px "Georgia", "Times New Roman", serif`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-
-                    ctx.fillText(phrase, x, y);
-
-                    ctx.shadowBlur = 0;
-                    ctx.globalAlpha = alpha * 0.5;
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillText(phrase, x, y);
-
-                    ctx.restore();
-                }
-            }
-
-            function createStars() {
-                const container = document.getElementById('starsContainer');
-                container.innerHTML = '';
-                const count = 55;
-                for (let i = 0; i < count; i++) {
-                    const star = document.createElement('div');
-                    star.className = 'star';
-                    const size = 0.8 + Math.random() * 2;
-                    star.style.width = size + 'px';
-                    star.style.height = size + 'px';
-                    star.style.left = Math.random() * 100 + '%';
-                    star.style.top = Math.random() * 100 + '%';
-                    star.style.setProperty('--dur', (1.5 + Math.random() * 2.5) + 's');
-                    star.style.animationDelay = Math.random() * 3 + 's';
-                    container.appendChild(star);
-                }
-            }
-
-            function resize() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-                updateHeartScale();
-                createStars();
-            }
-
-            function animate(timestamp) {
-                time = timestamp * 0.001;
-                globalOffset += SPEED * 0.012;
-                if (globalOffset > 1) globalOffset -= 1;
-
-                draw();
-                requestAnimationFrame(animate);
-            }
-
-            function switchLanguage() {
-                currentLangIndex = (currentLangIndex + 1) % languagePhrases.length;
-                const selected = languagePhrases[currentLangIndex];
-                phrases = [selected.phrase];
-                document.querySelector('.lang-btn').textContent = `🌐 ${selected.lang}`;
-            }
-
-            document.getElementById('langButton').addEventListener('click', switchLanguage);
-            document.querySelector('.lang-btn').textContent = `🌐 ${languagePhrases[0].lang}`;
-
-            window.addEventListener('resize', resize);
-            window.addEventListener('orientationchange', () => {
-                setTimeout(resize, 50);
-            });
-            window.addEventListener('touchstart', () => {}, { passive: true });
-
-            resize();
-            requestAnimationFrame(animate);
-        })();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

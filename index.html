@@ -3,194 +3,738 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💖</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Caveat:wght@400;700&family=Comfortaa:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>Фізичний чек-лист мого дня | МКТ та термодинаміка</title>
+    <style>
+        :root {
+            --bg: #fdf6f0;
+            --card-bg: #ffffff;
+            --text: #3d2c2a;
+            --accent: #c77d7d;
+            --accent2: #d4a5a5;
+            --accent3: #e8c5c5;
+            --morning: #f9e8d9;
+            --day: #fef9f3;
+            --evening: #f3edf7;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --radius: 20px;
+            --transition: 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            line-height: 1.6;
+            padding: 10px;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 860px;
+            position: relative;
+            perspective: 1200px;
+        }
+
+        /* Progress bar */
+        .progress-bar-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: transparent;
+            z-index: 1000;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4a5a5, #c77d7d, #b86565);
+            transition: width 0.5s ease;
+            border-radius: 0 3px 3px 0;
+        }
+
+        /* Slide counter */
+        .slide-counter {
+            text-align: center;
+            margin-bottom: 14px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: #b89797;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        /* Card */
+        .slide-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 40px 44px 36px;
+            min-height: 520px;
+            transition: var(--transition);
+            position: relative;
+            overflow-y: auto;
+            max-height: 78vh;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            animation: fadeSlideIn 0.5s ease;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Time badge */
+        .time-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+        }
+        .badge-morning {
+            background: #fef3e4;
+            color: #c07840;
+        }
+        .badge-day {
+            background: #fef9f3;
+            color: #b08a50;
+        }
+        .badge-evening {
+            background: #f5f0fa;
+            color: #7b5e9c;
+        }
+        .badge-title {
+            background: #fdf2f2;
+            color: #c77d7d;
+            font-size: 14px;
+            padding: 8px 20px;
+        }
+
+        /* Typography */
+        .slide-title {
+            font-size: 1.7em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #3d2c2a;
+            letter-spacing: -0.3px;
+            line-height: 1.25;
+        }
+        .slide-subtitle {
+            font-size: 1em;
+            color: #8c6e6e;
+            margin-bottom: 20px;
+            font-style: italic;
+            font-weight: 400;
+        }
+        .phenomenon-tag {
+            display: inline-block;
+            background: #fdf2f2;
+            color: #b86565;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.88em;
+            margin-bottom: 14px;
+            letter-spacing: 0.3px;
+            border: 1px solid #f5e0e0;
+        }
+        .section-label {
+            font-weight: 700;
+            color: #5c3d3d;
+            margin-top: 14px;
+            margin-bottom: 4px;
+            font-size: 0.95em;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        .explanation-text {
+            color: #4a3535;
+            font-size: 0.94em;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        .formula-highlight {
+            background: #fdf6f0;
+            padding: 8px 14px;
+            border-radius: 10px;
+            display: inline-block;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 0.9em;
+            color: #7a4a4a;
+            margin: 4px 0;
+            letter-spacing: 0.5px;
+            border-left: 3px solid #d4a5a5;
+        }
+        .detail-block {
+            background: #fefcf9;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border: 1px solid #f5ece5;
+            font-size: 0.9em;
+            color: #5c4545;
+        }
+        .emoji-accent {
+            font-size: 1.4em;
+            margin-right: 4px;
+        }
+
+        /* Title slide special */
+        .title-slide {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 480px;
+            gap: 14px;
+        }
+        .title-slide .main-title {
+            font-size: 2.1em;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            color: #3d2c2a;
+        }
+        .title-slide .author {
+            font-size: 1.05em;
+            color: #8c6e6e;
+            font-weight: 500;
+        }
+        .title-slide .motto {
+            font-style: italic;
+            color: #b08a8a;
+            max-width: 440px;
+            font-size: 0.95em;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+        .divider-dot {
+            width: 42px;
+            height: 3px;
+            background: #e8c5c5;
+            border-radius: 4px;
+            margin: 6px 0;
+        }
+
+        /* Conclusion slide */
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 14px 0;
+        }
+        .conclusion-item {
+            background: #fefcf9;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.85em;
+            border: 1px solid #f5ece5;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: #4a3535;
+        }
+        .conclusion-item .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d4a5a5;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .final-words {
+            background: #fdf6f0;
+            border-radius: 14px;
+            padding: 18px 20px;
+            margin-top: 14px;
+            font-style: italic;
+            color: #5c3d3d;
+            border-left: 4px solid #d4a5a5;
+            line-height: 1.7;
+            font-size: 0.93em;
+        }
+
+        /* Navigation */
+        .nav-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #e8d5d5;
+            background: #fff;
+            cursor: pointer;
+            font-size: 1.3em;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8c6e6e;
+            font-weight: 700;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-btn:hover {
+            background: #fdf2f2;
+            border-color: #c77d7d;
+            color: #c77d7d;
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(180, 100, 100, 0.18);
+        }
+        .nav-btn:active {
+            transform: scale(0.94);
+            transition: 0.1s ease;
+        }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .slide-dots {
+            display: flex;
+            gap: 7px;
+            align-items: center;
+        }
+        .slide-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #e0cccc;
+            transition: all 0.35s ease;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .slide-dot.active {
+            background: #c77d7d;
+            width: 28px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(180, 100, 100, 0.3);
+        }
+        .slide-dot:hover {
+            background: #d4a5a5;
+        }
+
+        /* Tags for numbered items */
+        .num-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fdf2f2;
+            color: #b86565;
+            font-weight: 700;
+            font-size: 0.78em;
+            margin-right: 6px;
+            flex-shrink: 0;
+            border: 1px solid #f0d8d8;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .slide-card {
+                padding: 22px 18px 20px;
+                border-radius: 16px;
+                min-height: auto;
+                max-height: 85vh;
+            }
+            .slide-title {
+                font-size: 1.3em;
+            }
+            .title-slide .main-title {
+                font-size: 1.5em;
+            }
+            .conclusion-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .explanation-text {
+                font-size: 0.85em;
+            }
+            .formula-highlight {
+                font-size: 0.8em;
+                padding: 6px 10px;
+            }
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1em;
+            }
+            .slide-dot {
+                width: 7px;
+                height: 7px;
+            }
+            .slide-dot.active {
+                width: 22px;
+            }
+            .detail-block {
+                font-size: 0.82em;
+                padding: 10px 12px;
+            }
+            .conclusion-item {
+                font-size: 0.78em;
+            }
+            .final-words {
+                font-size: 0.84em;
+                padding: 14px 16px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Легкі сердечка на фоні -->
-    <div class="hearts-container" id="heartsContainer"></div>
+    <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
 
-    <!-- Навігація -->
-    <nav class="navbar glass">
-        <div class="nav-container">
-            <a href="#home" class="nav-logo">💝</a>
-            <ul class="nav-menu">
-                <li><a href="#home">Головна</a></li>
-                <li><a href="#our-story">Наша історія</a></li>
-                <li><a href="#game">Гра</a></li>
-                <li><a href="#reasons">Про тебе</a></li>
-                <li><a href="#message">Лист</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+    <div class="presentation-container">
+        <div class="slide-counter" id="slideCounter">Слайд 1 / 11</div>
+
+        <div class="slide-card" id="slideCard">
+            <!-- Slides rendered by JS -->
         </div>
-    </nav>
 
-    <!-- Hero -->
-    <section id="home" class="hero">
-        <div class="hero-content glass-card">
-            <p class="hero-greeting">Моя улюблена</p>
-            <h1 class="hero-title">
-                <span class="typewriter" id="typewriter"></span>
-                <span class="cursor">|</span>
-            </h1>
-            <p class="hero-subtitle">Люблю дуже сильно💖💋</p>
-            <div class="hero-buttons">
-                <a href="#our-story" class="btn btn-primary">Наша історія</a>
-                <a href="#message" class="btn btn-secondary">Лист</a>
-            </div>
-            <div class="scroll-indicator">
-                <span>Гортай вниз</span>
-                <div class="mouse">
-                    <div class="wheel"></div>
-                </div>
-            </div>
+        <div class="nav-row">
+            <button class="nav-btn" id="prevBtn" title="Попередній" aria-label="Попередній слайд">‹</button>
+            <div class="slide-dots" id="slideDots"></div>
+            <button class="nav-btn" id="nextBtn" title="Наступний" aria-label="Наступний слайд">›</button>
         </div>
-    </section>
+    </div>
 
-    <!-- Наша історія -->
-    <section id="our-story" class="section story-section">
-        <div class="section-container">
-            <h2 class="section-title">Як почалось спілкування</h2>
-            <p class="section-subtitle">Моменти, які я пам'ятаю(ну не всі)</p>
-            <div class="timeline">
-                <div class="timeline-item left">
-                    <div class="timeline-content glass">
-                        <div class="timeline-icon">🕵️</div>
-                        <h3>Ти дізналась</h3>
-                        <p>7 липня 2025, приблизно 22:00. Ти написала: «А то ти типу серйозно», і запитала «А як це так вийшло?», ну бачиш якось так вийшло)</p>
-                        <span class="timeline-date">7 липня 2025, 22:00</span>
+    <script>
+        (function() {
+            // ============ SLIDES DATA ============
+            const slides = [{
+                // Slide 1 — Title
+                type: 'title',
+                badge: 'Проєкт із фізики',
+                title: 'Фізичний чек-лист мого дня',
+                subtitle: 'МКТ та термодинаміка',
+                author: 'Підготувала: [Твоє ім’я]',
+                motto: 'Мій день — це суцільний рух молекул, фазові переходи, теплові процеси та робота внутрішньої енергії. Я просто навчилася їх помічати й пояснювати.',
+                extra: 'Сьогодні я прослідкую за кожним явищем, яке мене супроводжує: від запаху кави зранку до охолодження вечірнього чаю. У цьому проєкті — справжній фізичний щоденник звичайного шкільного дня.'
+            }, {
+                // Slide 2 — Ранок, запах кави
+                time: '🌅 Ранок',
+                badgeClass: 'badge-morning',
+                title: 'Як до мене прийшов запах кави',
+                phenomenon: 'Дифузія',
+                content: `
+                    <p class="explanation-text">Я прокинулась і ще лежу в ліжку, але вже чую, як мама порається на кухні. Разом зі звуками до моєї кімнати долинає теплий, глибокий аромат свіжозвареної кави.</p>
+                    <p class="section-label">🔬 Пояснення:</p>
+                    <p class="explanation-text">Кава містить сотні летких ароматичних речовин (ефірні олії, альдегіди, піразини), які легко випаровуються з гарячої поверхні. У газоподібному стані ці молекули рухаються хаотично з величезними швидкостями — <strong>сотні метрів за секунду</strong>. Вони стикаються з молекулами азоту та кисню й поступово проникають у простір між ними.</p>
+                    <p class="explanation-text">Рушійна сила дифузії — <strong>різниця концентрацій</strong>. На кухні концентрація ароматичних молекул висока, у спальні — майже нульова. Згідно із законом Фіка, потік речовини пропорційний градієнту концентрації. Швидкість дифузії зростає з температурою, адже E<sub>k</sub> = (3/2)kT, тому гаряча кава «пахне» набагато інтенсивніше.</p>
+                    <span class="formula-highlight">E<sub>k</sub> = (3/2)kT &nbsp;|&nbsp; k = 1,38×10<sup>−23</sup> Дж/К &nbsp;|&nbsp; T ≈ 373 K → E<sub>k</sub> ≈ 7,7×10<sup>−21</sup> Дж</span>
+                `
+            }, {
+                // Slide 3 — Парфуми
+                time: '🌅 Ранок',
+                badgeClass: 'badge-morning',
+                title: 'Коли я бризкаю улюбленими парфумами',
+                phenomenon: 'Випаровування, охолодження під час випаровування, дифузія',
+                content: `
+                    <p class="explanation-text">Перед виходом до школи я роблю один пшик на зап’ясток — шкіра стає вологою та приємно прохолодною, а за мить кімната наповнюється квітковим шлейфом.</p>
+                    <p class="section-label">🔬 Пояснення:</p>
+                    <p class="explanation-text">Туалетна вода — це суміш летких ароматичних речовин у <strong>етиловому спирті</strong>. Спирт дуже швидко випаровується. Щоб випаруватися, молекули спирту повинні подолати сили міжмолекулярного притягання (водневі звʼязки та ван-дер-ваальсові сили). Це можуть зробити лише <strong>найшвидші молекули</strong>, які мають кінетичну енергію, більшу за роботу виходу. Покидаючи рідину, вони забирають енергію з собою — середня кінетична енергія молекул, що залишилися, зменшується, температура знижується, і я відчуваю прохолоду.</p>
+                    <span class="formula-highlight">Q = L·m &nbsp;|&nbsp; L (спирт) ≈ 840 кДж/кг &nbsp;|&nbsp; адіабатичне випаровування</span>
+                    <div class="detail-block">💡 Парфуми наносять на точки пульсу (запʼястя, шия, за вухами) — там шкіра тепліша через близькість судин, випаровування інтенсивніше, і аромат розкривається яскравіше.</div>
+                    <p class="explanation-text">А далі молекули аромату <strong>дифундують</strong> у повітрі, поширюючись далеко за межі запʼястка — і ось уже в передпокої чути квітковий шлейф.</p>
+                `
+            }, {
+                // Slide 4 — Прасування
+                time: '🌅 Ранок',
+                badgeClass: 'badge-morning',
+                title: 'Прасування шкільної блузки',
+                phenomenon: 'Теплопровідність, пароутворення, конденсація, фазовий перехід',
+                content: `
+                    <p class="explanation-text">Я вмикаю праску, чекаю, поки нагріється, і веду по зімʼятій тканині. За кілька секунд блузка стає ідеально рівною, а від тканини йде легка пара.</p>
+                    <p class="section-label">🔬 Пояснення:</p>
+                    <p class="explanation-text">Металева підошва праски нагрівається завдяки електричному струму. Метали мають високу <strong>теплопровідність</strong> завдяки вільним електронам: коефіцієнт теплопровідності алюмінію ≈ <strong>200 Вт/(м·К)</strong>. Внутрішня енергія металу зростає, коливання іонів кристалічної ґратки посилюються.</p>
+                    <p class="explanation-text">Коли гаряча підошва торкається вологої тканини, вода поглинає енергію. Коли її стає достатньо для подолання міжмолекулярних звʼязків, вода перетворюється на пару. <strong>Питома теплота пароутворення води — 2260 кДж/кг</strong>. Пара розширюється, її тиск розпрямляє волокна тканини. Виходячи назовні й контактуючи з холоднішим повітрям, пара конденсується — я бачу легкий білий туман. Це замкнений цикл фазових переходів.</p>
+                    <span class="formula-highlight">Закон Фур'є: Q/Δt = −k·A·(ΔT/Δx) &nbsp;|&nbsp; k (алюміній) ≈ 200 Вт/(м·К)</span>
+                `
+            }, {
+                // Slide 5 — Ложка в чаї
+                time: '🌅 Ранок',
+                badgeClass: 'badge-morning',
+                title: 'Чайна ложка обпікає пальці',
+                phenomenon: 'Теплопровідність',
+                content: `
+                    <p class="explanation-text">Я наливаю окріп у горнятко, кидаю цукор і починаю розмішувати. Уже за кілька секунд металева ложка стає гарячою — доводиться швидко витягти її.</p>
+                    <p class="section-label">🔬 Пояснення:</p>
+                    <p class="explanation-text">Гаряча вода (≈100 °C) має велику внутрішню енергію: молекули рухаються дуже швидко. Коли ложка занурена, молекули води стикаються з іонами кристалічної ґратки металу й передають їм кінетичну енергію. У металах є <strong>вільні електрони</strong>, які дуже швидко поширюють отриману енергію по всьому обʼєму — саме тому метали є чудовими провідниками тепла.</p>
+                    <span class="formula-highlight">k (сталь) ≈ 50 Вт/(м·К) &nbsp;|&nbsp; набагато більше, ніж у дерева (~0,15) чи пластику (~0,2)</span>
+                    <p class="explanation-text">Теплообмін триватиме, поки температура води й ложки не вирівняється — тоді настане <strong>теплова рівновага</strong>. Мої пальці, торкаючись гарячого металу, отримують тепло через ту саму теплопровідність — терморецептори шкіри реагують і посилають сигнал у мозок.</p>
+                `
+            }, {
+                // Slide 6 — Після фізкультури
+                time: '☀️ День у школі',
+                badgeClass: 'badge-day',
+                title: 'Після фізкультури: холодок у коридорі',
+                phenomenon: 'Випаровування з поглинанням тепла',
+                content: `
+                    <p class="explanation-text">Ми грали у волейбол, футболка намокла від поту. Коли я вийшла в коридор, мене одразу пройняв холодок — стало навіть мерзлякувато.</p>
+                    <p class="section-label">🔬 Пояснення:</p>
+                    <p class="explanation-text">Піт на 99% — це вода. Вона починає випаровуватися. Щоб покинути рідину, молекула повинна подолати <strong>водневі звʼязки</strong>, а це потребує енергії. <strong>Питома теплота пароутворення води при 37 °C ≈ 2400 кДж/кг</strong>. Для випаровування лише 1 грама поту потрібно ≈2400 Дж — цю енергію молекули забирають зі шкіри. Шкіра охолоджується, кров у капілярах охолоджується — я відчуваю прохолоду.</p>
+                    <div class="detail-block">💡 На протязі випаровування пришвидшується: потік повітря забирає молекули пари від шкіри, запобігаючи насиченню. Це <strong>вимушена конвекція</strong>. При високій вологості випаровування сповільнюється — тому в спеку з високою вологістю нам важче.</div>
+                    <span class="formula-highlight">Це природний механізм терморегуляції тіла!</span>
+                `
+            }, {
+                // Slide 7 — Пил у промені
+                time: '☀️ День у школі',
+                badgeClass: 'badge-day',
+                title: 'Пил у сонячному промені',
+                phenomenon: 'Броунівський рух',
+                content: `
+                    <p class="explanation-text">Сонце пробивається крізь вікно, і в золотому промені я бачу, як танцюють дрібні порошинки. Вони не падають униз, а хаотично ворушаться, ніби живі.</p>
+                    <p class="section-label">🔬 Пояснення:</p>
+                    <p class="explanation-text">Броунівський рух — безперервний хаотичний рух дрібних частинок, завислих у газі чи рідині, спричинений <strong>ударами молекул середовища</strong>. Молекули азоту та кисню рухаються зі швидкостями ≈500 м/с (при 20 °C) і безперервно стикаються з порошинкою. Кількість ударів із різних боків у кожен момент різна — виникають <strong>флуктуації тиску</strong>, і частинка отримує випадкові поштовхи.</p>
+                    <span class="formula-highlight">⟨x²⟩ = 2Dt &nbsp;|&nbsp; D — коефіцієнт дифузії (залежить від T, вʼязкості, розміру частинки)</span>
+                    <div class="detail-block">📜 Відкритий Робертом Броуном у 1827 р. У 1905 р. Альберт Ейнштейн розробив математичну теорію — це стало вагомим <strong>доказом існування атомів і молекул</strong>. Дивлячись на танцюючий пил, я на власні очі бачу наслідок теплового руху молекул.</div>
+                `
+            }, {
+                // Slide 8 — Розігрівання обіду
+                time: '🏠 День після школи',
+                badgeClass: 'badge-day',
+                title: 'Розігріваю обід: суп закипає',
+                phenomenon: 'Теплопередача, конвекція, кипіння, пароутворення',
+                content: `
+                    <p class="explanation-text">Я ставлю каструльку на плиту. Вогонь нагріває дно, рідина починає рухатись, а згодом у всій товщі зʼявляються бульбашки — суп закипів.</p>
+                    <p class="section-label">🔬 Пояснення:</p>
+                    <p class="explanation-text">Спочатку тепло від полумʼя передається дну через <strong>теплопровідність</strong>. Нагріта рідина розширюється, її густина зменшується, вона підіймається — виникає <strong>природна конвекція</strong>. Холодніша рідина опускається, і так перемішується весь обʼєм.</p>
+                    <p class="explanation-text">Коли температура сягає ≈100 °C (за нормального атм. тиску 101325 Па), починається <strong>кипіння</strong> — пароутворення в усьому обʼємі. На мікронерівностях дна утворюються бульбашки насиченої пари. Тиск пари всередині має зрівноважити атмосферний + гідростатичний тиск. Бульбашки спливають і лопаються. <strong>Питома теплота пароутворення води — 2260 кДж/кг</strong>. Під час кипіння температура стала — уся енергія йде на розрив міжмолекулярних звʼязків.</p>
+                    <div class="detail-block">🏔️ На високогірʼї атмосферний тиск нижчий → температура кипіння знижується → приготування їжі займає більше часу.</div>
+                `
+            }, {
+                // Slide 9 — Ноутбук
+                time: '🌙 Вечір',
+                badgeClass: 'badge-evening',
+                title: 'Ноутбук, домашнє завдання і гарячий корпус',
+                phenomenon: 'Зміна внутрішньої енергії, закон Джоуля — Ленца, вимушена конвекція',
+                content: `
+                    <p class="explanation-text">Я сідаю за уроки, вмикаю ноутбук. Через пів години гуде кулер, а корпус знизу став гарячим — навіть крізь джинси відчутно.</p>
+                    <p class="section-label">🔬 Пояснення:</p>
+                    <p class="explanation-text">Усередині ноутбука — мільйони транзисторів. Під час їхнього перемикання через мікросхеми тече струм. <strong>Закон Джоуля — Ленца:</strong> Q = I²Rt. Електрична енергія перетворюється на внутрішню, температура процесора зростає (може сягати 100 °C!).</p>
+                    <span class="formula-highlight">Q = I²Rt &nbsp;|&nbsp; Потужність процесора: 15–45 Вт &nbsp;|&nbsp; Закон Ньютона — Ріхмана: Q = h·A·(T<sub>proc</sub> – T<sub>air</sub>)</span>
+                    <p class="explanation-text">Система охолодження: <strong>теплові трубки</strong> (рідина випаровується біля процесора й конденсується біля радіатора) + <strong>вентилятор</strong> (вимушена конвекція). Частина тепла все одно передається корпусу через теплопровідність. Якщо система не впорається — спрацює тротлінг або ноутбук вимкнеться.</p>
+                `
+            }, {
+                // Slide 10 — Горнятко чаю
+                time: '🌙 Вечір',
+                badgeClass: 'badge-evening',
+                title: 'Горнятко чаю та три шляхи тепловтрат',
+                phenomenon: 'Теплопровідність, конвекція, теплове випромінювання, теплова рівновага',
+                content: `
+                    <p class="explanation-text">Я вмостилася з горнятком гарячого чаю. Він поступово холоне — працюють одразу три механізми теплопередачі.</p>
+                    <p class="section-label">🔬 Три механізми в одному горнятку:</p>
+                    <p class="explanation-text"><span class="num-circle">1</span><strong>Теплопровідність.</strong> Тепло від чаю передається через стінки керамічного горнятка (k ≈ 1–2 Вт/(м·К)). Моя долоня гріється саме через теплопровідність.</p>
+                    <p class="explanation-text"><span class="num-circle">2</span><strong>Конвекція.</strong> Повітря біля гарячого горнятка нагрівається, розширюється, стає менш густим і підіймається вгору — виникає природна конвекція, яка безперервно забирає тепло.</p>
+                    <p class="explanation-text"><span class="num-circle">3</span><strong>Теплове випромінювання.</strong> Горнятко випромінює інфрачервоні хвилі. Закон Стефана — Больцмана: P = εσAT⁴. Для кераміки ε ≈ 0,9. При T ≈ 350 K і A ≈ 0,03 м² потужність випромінювання ≈ <strong>20 Вт</strong> — суттєвий канал тепловтрат!</p>
+                    <span class="formula-highlight">P = εσAT⁴ &nbsp;|&nbsp; σ = 5,67×10<sup>−8</sup> Вт/(м²·К⁴) &nbsp;|&nbsp; ε (кераміка) ≈ 0,9</span>
+                    <p class="explanation-text">Чай холоне, внутрішня енергія зменшується. Коли температури зрівняються — настане <strong>теплова рівновага</strong> (другий закон термодинаміки).</p>
+                `
+            }, {
+                // Slide 11 — Висновки
+                type: 'conclusion',
+                time: '📋 Підсумки',
+                badgeClass: 'badge-title',
+                title: 'Висновки: мій фізичний день',
+                phenomenon: '',
+                content: `
+                    <p class="section-label">🔍 Що я побачила сьогодні?</p>
+                    <div class="conclusion-grid">
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Дифузія</strong> — запах кави та парфумів, закон Фіка, градієнт концентрації.</span></div>
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Випаровування</strong> — парфуми та піт; Q = Lm, адіабатичне охолодження шкіри.</span></div>
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Теплопровідність</strong> — ложка в чаї, праска; закон Фур'є, вільні електрони металів.</span></div>
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Фазові переходи</strong> — прасування: рідина → пара → рідина, цикл із поглинанням і виділенням теплоти.</span></div>
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Броунівський рух</strong> — пил у промені; ⟨x²⟩ = 2Dt, доказ існування молекул.</span></div>
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Конвекція</strong> — суп у каструлі, охолодження ноутбука; природна й вимушена.</span></div>
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Кипіння</strong> — бульбашки пари; тиск насиченої пари = зовнішній тиск, T = const.</span></div>
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Закон Джоуля — Ленца</strong> — ноутбук; Q = I²Rt, електроенергія → внутрішня енергія.</span></div>
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Теплове випромінювання</strong> — горнятко; P = εσAT⁴, інфрачервоні хвилі.</span></div>
+                        <div class="conclusion-item"><span class="dot"></span><span><strong>Теплова рівновага</strong> — другий закон термодинаміки; тепло мимовільно переходить від гарячого до холодного.</span></div>
                     </div>
-                </div>
-                <div class="timeline-item right">
-                    <div class="timeline-content glass">
-                        <div class="timeline-icon">💬</div>
-                        <h3>Нічні переписки</h3>
-                        <p>Ми почали спілкуватися до самої ночі. Я спеціально старався не заснути , але засинав і пропускав твої повідомлення(</p>
-                        <span class="timeline-date">Липень 2025</span>
+                    <div class="final-words">
+                        <strong>💭 Мій особистий підсумок:</strong><br>
+                        Раніше я думала, що фізика — це формули на дошці та задачі в підручнику. Тепер я знаю: молекулярна фізика і термодинаміка — це справжня мова мого звичайного дня. Запах кави, прохолода від парфумів, тепло ноутбука, праска, чайна ложка, навіть пил у сонячному світлі — усе це розповідає історію про рух молекул, енергію та фазові переходи. Я більше ніколи не подивлюся на звичайний ранок так, як раніше. <strong>І це робить кожен мій день трішечки чарівним — чарівним і науковим водночас.</strong>
                     </div>
-                </div>
-                <div class="timeline-item left">
-                    <div class="timeline-content glass">
-                        <div class="timeline-icon">🎢</div>
-                        <h3>Перша прогулянка в двох</h3>
-                        <p>Я думав буде з нами Анжеліка. Але її не було і я не знав як поводитись ну було трошки напружно.</p>
-                        <span class="timeline-date">Не пам'ятаю дату(</span>
-                    </div>
-                </div>
-                <div class="timeline-item right">
-                    <div class="timeline-content glass">
-                        <div class="timeline-icon">💘</div>
-                        <h3>Перший раз тебе обійняв</h3>
-                        <p>Ми вже розходились прийшли під під'їзд і я тебе обійняв, ти б бачила свій вираз лиця, я це запам'ятаю на довго 😲</p>
-                        <span class="timeline-date">Не пам'ятаю дату</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                `
+            }];
 
-    <!-- Гра "Злови сердечко" -->
-    <section id="game" class="section game-section">
-        <div class="section-container">
-            <h2 class="section-title">Гра для тебе</h2>
-            <p class="section-subtitle">Лови сердечко і розслабся трошки (Клікай на нього)</p>
-            <div class="game-wrapper glass">
-                <div class="game-area" id="gameArea">
-                    <div class="game-heart" id="gameHeart">❤️</div>
-                </div>
-                <div class="game-info">
-                    <p>Спіймано: <span id="score">0</span></p>
-                    <p class="game-hint">Сердечко тікає, встигни клікнути!</p>
-                </div>
-                <div id="gameMessage" class="game-message"></div>
-            </div>
-        </div>
-    </section>
+            // ============ STATE ============
+            let currentSlide = 0;
+            const totalSlides = slides.length;
 
-    <!-- Чому ти найкраща -->
-    <section id="reasons" class="section reasons-section">
-        <div class="section-container">
-            <h2 class="section-title">Про тебе</h2>
-            <p class="section-subtitle">(Список можна продовжувати)</p>
-            <div class="reasons-grid" id="reasonsGrid">
-                <!-- JS заповнить -->
-            </div>
-        </div>
-    </section>
+            // ============ DOM REFS ============
+            const slideCard = document.getElementById('slideCard');
+            const slideCounter = document.getElementById('slideCounter');
+            const progressBar = document.getElementById('progressBar');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideDotsContainer = document.getElementById('slideDots');
 
-    <!-- Лічильник -->
-    <section class="section counter-section">
-        <div class="section-container">
-            <div class="counter-card glass">
-                <h2>Наше спілкування вже тягнеться</h2>
-                <div class="counter-display">
-                    <div class="counter-unit">
-                        <span class="counter-number" id="daysCount">0</span>
-                        <span class="counter-label">днів</span>
-                    </div>
-                    <div class="counter-separator">:</div>
-                    <div class="counter-unit">
-                        <span class="counter-number" id="hoursCount">0</span>
-                        <span class="counter-label">годин</span>
-                    </div>
-                    <div class="counter-separator">:</div>
-                    <div class="counter-unit">
-                        <span class="counter-number" id="minutesCount">0</span>
-                        <span class="counter-label">хвилин</span>
-                    </div>
-                    <div class="counter-separator">:</div>
-                    <div class="counter-unit">
-                        <span class="counter-number" id="secondsCount">0</span>
-                        <span class="counter-label">секунд</span>
-                    </div>
-                </div>
-                <p class="counter-message">І це тільки початок ;)</p>
-            </div>
-        </div>
-    </section>
+            // ============ BUILD DOTS ============
+            function buildDots() {
+                slideDotsContainer.innerHTML = '';
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = 'slide-dot';
+                    if (i === currentSlide) dot.classList.add('active');
+                    dot.setAttribute('aria-label', 'Слайд ' + (i + 1));
+                    dot.addEventListener('click', () => goToSlide(i));
+                    slideDotsContainer.appendChild(dot);
+                }
+            }
 
-    <!-- Лист -->
-    <section id="message" class="section message-section">
-        <div class="section-container">
-            <h2 class="section-title">Лист</h2>
-            <div class="letter-container">
-                <div class="letter-envelope glass" id="envelope">
-                    <div class="envelope-flap"></div>
-                    <div class="envelope-body">
-                        <span class="envelope-heart">💌</span>
-                        <p class="envelope-text">Натисни, щоб відкрити</p>
-                    </div>
-                    <div class="envelope-paper" id="paper">
-                        <div class="paper-content">
-                            <p class="paper-dear">Моя любима,</p>
-                            <p>Той вечір 7 липня, я не міг подумати, що з того моменту почнемо спілкуватись. З тобою я можу бути дурним, нормальним, несерйозним, інколи ти все одно зла на мене.</p>
-                            <p>З тобою цікаво гуляти, спілкуватись ну від тебе вайбік якийсь йде. Я тобі дякую за все, що ти ще не розвернулась і не поставила крапку.</p>
-                            <p>Я обіцяю помінятись і ставати кращим, щоб все було добре💖</p>
-                            <p class="paper-signature">Твоя Мавпочка🙈</p>
+            // ============ RENDER SLIDE ============
+            function renderSlide(index) {
+                const s = slides[index];
+                let html = '';
+
+                if (s.type === 'title') {
+                    // Title slide
+                    html = `
+                        <div class="title-slide">
+                            <span class="time-badge badge-title">${s.badge}</span>
+                            <h1 class="main-title">${s.title}</h1>
+                            <h2 class="slide-subtitle" style="font-size:1.2em;">${s.subtitle}</h2>
+                            <div class="divider-dot"></div>
+                            <p class="author">${s.author}</p>
+                            <p class="motto">${s.motto}</p>
+                            <p style="color:#7a5e5e;font-size:0.9em;max-width:500px;margin-top:10px;">${s.extra}</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                    `;
+                } else if (s.type === 'conclusion') {
+                    // Conclusion slide
+                    html = `
+                        <span class="time-badge ${s.badgeClass}">${s.time}</span>
+                        <h2 class="slide-title">${s.title}</h2>
+                        ${s.content}
+                    `;
+                } else {
+                    // Regular slide
+                    html = `
+                        <span class="time-badge ${s.badgeClass}">${s.time}</span>
+                        <h2 class="slide-title">${s.title}</h2>
+                        <span class="phenomenon-tag">⚡ ${s.phenomenon}</span>
+                        ${s.content}
+                    `;
+                }
 
-    <!-- Футер -->
-    <footer class="footer glass">
-        <div class="footer-content">
-            <p>Зроблено з любов’ю для тебе</p>
-            <div class="footer-hearts">
-                <span>💖</span><span>💕</span><span>💗</span>
-            </div>
-            <p class="footer-quote">Все для тебе💖</p>
-        </div>
-    </footer>
+                slideCard.innerHTML = html;
+                // Scroll to top of card
+                slideCard.scrollTop = 0;
+                // Re-trigger animation
+                slideCard.style.animation = 'none';
+                slideCard.offsetHeight; // reflow
+                slideCard.style.animation = 'fadeSlideIn 0.5s ease';
 
-    <script src="script.js"></script>
+                // Update counter
+                slideCounter.textContent = `Слайд ${index + 1} / ${totalSlides}`;
+
+                // Update progress bar
+                const progressPercent = ((index + 1) / totalSlides) * 100;
+                progressBar.style.width = progressPercent + '%';
+
+                // Update dots
+                const dots = slideDotsContainer.querySelectorAll('.slide-dot');
+                dots.forEach((d, i) => {
+                    if (i === index) d.classList.add('active');
+                    else d.classList.remove('active');
+                });
+
+                // Update nav buttons
+                prevBtn.disabled = (index === 0);
+                nextBtn.disabled = (index === totalSlides - 1);
+            }
+
+            // ============ NAVIGATION ============
+            function goToSlide(index) {
+                if (index < 0 || index >= totalSlides) return;
+                currentSlide = index;
+                renderSlide(currentSlide);
+            }
+
+            function nextSlide() {
+                if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
+            }
+
+            function prevSlide() {
+                if (currentSlide > 0) goToSlide(currentSlide - 1);
+            }
+
+            // ============ EVENT LISTENERS ============
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+                    e.preventDefault();
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    prevSlide();
+                } else if (e.key === 'Home') {
+                    e.preventDefault();
+                    goToSlide(0);
+                } else if (e.key === 'End') {
+                    e.preventDefault();
+                    goToSlide(totalSlides - 1);
+                }
+            });
+
+            // Touch swipe support
+            let touchStartX = 0;
+            let touchStartY = 0;
+            slideCard.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+            slideCard.addEventListener('touchend', (e) => {
+                const dx = e.changedTouches[0].screenX - touchStartX;
+                const dy = e.changedTouches[0].screenY - touchStartY;
+                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+                    if (dx < 0) nextSlide();
+                    else prevSlide();
+                }
+            });
+
+            // ============ INIT ============
+            buildDots();
+            renderSlide(0);
+        })();
+    </script>
 </body>
 </html>
